@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome To Beflam App Client</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <p class="text-success font-weight-bold text-center">授权成功</p>
+    <p class="text-info">以下是从 用户统一认证中心 获取 token 时使用的信息概览：</p>
+
+    <div class="col-7 offset-2 border-bottom text-left">
+        <ul>
+            <li><b>ClientId</b> - ro.client</li>
+            <li><b>ClientSecret</b> - secret</li>
+            <li><b>UserName</b> - admin</li>
+            <li><b>Password</b> - 123456</li>
+        </ul>
+    </div>
+
+    <div class="col-12">
+
+        <p class="text-danger font-weight-bold text-center mt-5"> RPC 调用</p>
+        <p class="text-info">将使用以下数据进行 rpc 远程调用：</p>
+        <div class="col-7 offset-2 border-bottom text-left">
+            <ul>
+                <li><b>TokenInfo</b> - @ViewData["api1Token"]</li>
+                <li><b>ProtectApiResourceUrl</b> - http://localhost:5001/rpc/plus </li>
+                <li><b>RequestPars</b> - { a:"5", b:"6" }</li>
+            </ul>
+        </div>
+        <input type="button" name="rpc" value="调用独立 API 服务器并返回数据" class="btn-dark mt-5" onclick="rpc()" />
+
+        @if (ViewData.ContainsKey("RpcResponse"))
+        {
+        <p class="text-info">远程服务器返回以下数据： @ViewData["RpcResponse"]</p>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    function rpc() {
+       $.ajax({
+         type: "POST",
+         url: "http://localhost:5001/rpc/plus",
+         headers: {
+             Authorization: "Bearer @ViewData["api1Token"]"
+           },
+           data: {
+               a: "5",
+               b: "6"
+           },
+         success: function(result) {
+             console.log(result);
+             alert(result.result);
+         }
+     });
+    }
+</script>
